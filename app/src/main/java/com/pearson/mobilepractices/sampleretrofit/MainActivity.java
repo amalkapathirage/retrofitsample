@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         RestClient.get().getWeather("California", new Callback<WeatherResponse>() {
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
@@ -24,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("App", weatherResponse.main.humidity);
                 Log.i("App", weatherResponse.name);
                 Log.i("App", weatherResponse.main.temp);
-                Log.i("App", "Done");
-                // you get the point...
+
+                render(weatherResponse);
+
             }
 
             @Override
@@ -35,6 +38,16 @@ public class MainActivity extends AppCompatActivity {
                error.printStackTrace();
             }
         });
+    }
+
+    private void render(WeatherResponse weatherResponse) {
+        TextView view1 = (TextView) findViewById(R.id.text1);
+        TextView view2 = (TextView) findViewById(R.id.text2);
+        TextView view3 = (TextView) findViewById(R.id.text3);
+
+        view1.setText(weatherResponse.name);
+        view2.setText("temp " + weatherResponse.main.temp);
+        view3.setText("humidity " + weatherResponse.main.humidity);
     }
 
     @Override
